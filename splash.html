@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Underworld Hotspot</title>
+    <style>
+        @font-face {
+            font-family: 'Cinzel';
+            src: url('fonts/Cinzel-VariableFont_wght.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        body {
+            background: #000 url('images/background.webp') no-repeat center center fixed;
+            background-size: cover;
+            color: #fff;
+            font-family: 'Cinzel', serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            text-align: center;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            margin: 20px;
+            width: 90%;
+            max-width: 600px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px #fff;
+        }
+        h1 {
+            font-size: 2em;
+            color: #c0c0c0;
+        }
+        hr {
+            border: 1px solid #555;
+        }
+        label, input[type="text"], input[type="password"], input[type="submit"] {
+            display: block;
+            width: 90%;
+            max-width: 400px;
+            margin: 10px auto;
+        }
+        label {
+            font-size: 1em;
+        }
+        input[type="text"], input[type="password"] {
+            padding: 10px;
+            font-size: 1em;
+            border: none;
+            border-radius: 5px;
+        }
+        input[type="submit"] {
+            background: #c0c0c0;
+            color: #000;
+            font-size: 1em;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background: #fff;
+        }
+        .footer {
+            margin-top: 20px;
+            font-size: 0.8em;
+        }
+        .error {
+            color: red;
+            font-size: 1.2em;
+        }
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 1.5em;
+            }
+            label, input[type="text"], input[type="password"], input[type="submit"] {
+                width: 100%;
+            }
+            .container {
+                padding: 15px;
+                margin: 10px;
+            }
+        }
+    </style>
+    <script>
+        const allowedUsers = [
+            { username: 'user1', password: 'pass1' },
+            { username: 'user2', password: 'pass2' },
+        ];
+
+        async function validateForm(event) {
+            event.preventDefault();  // Prevent the default form submission
+
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const voucher = document.getElementById('voucher').value;
+            const errorElement = document.getElementById('error-message');
+
+            let userValid = false;
+            let voucherValid = false;
+
+            // Local user validation
+            if (username && password) {
+                userValid = allowedUsers.some(user => user.username === username && user.password === password);
+            }
+
+            // Remote voucher validation
+            if (voucher) {
+                try {
+                    // const response = await fetch('http://10.3.141.1:3000/validate', {
+                    const response = await fetch('http://192.168.8.2:3000/validate', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ code: voucher })
+                    });
+
+                    if (!response.ok) throw new Error('Network response was not ok');
+
+                    const result = await response.json();
+                    voucherValid = result.valid;
+
+                    if (!voucherValid) {
+                        errorElement.textContent = 'Invalid voucher code.';
+                    }
+                } catch (error) {
+                    errorElement.textContent = 'Request failed: ' + error.message;
+                }
+            }
+
+            if (userValid || voucherValid) {
+                event.target.submit();  // Manually submit the form if validation passes
+            } else if (!userValid && !voucherValid) {
+                errorElement.textContent = 'Invalid username/password.';
+            }
+
+            setTimeout(() => {
+                errorElement.textContent = '';
+            }, 5000);
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to the Underworld Hotspot</h1>
+        <hr>
+        <img src="images/logo.webp" alt="Underworld Logo" style="width: 100%; max-width: 400px;">
+        <hr>
+        <p>To gain access to the Internet, please log in using your credentials or a voucher code.</p>
+
+        <div id="error-message" class="error"></div>
+
+        <form method="GET" action="$authaction" onsubmit="validateForm(event)">
+            <input type="hidden" name="tok" value="$tok">
+            <input type="hidden" name="redir" value="$redir">
+
+            <!-- Username and Password Login -->
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username">
+
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password">
+
+            <hr>
+
+            <!-- Voucher Login -->
+            <label for="voucher">Voucher Code:</label>
+            <input type="text" id="voucher" name="voucher">
+
+            <input type="submit" value="Continue">
+        </form>
+
+        <hr>
+        <div class="footer">
+            <p>Copyright &copy; The Nodogsplash Contributors 2004-2023.</p>
+            <p>This software is released under the GNU GPL license.</p>
+        </div>
+    </div>
+</body>
+</html>

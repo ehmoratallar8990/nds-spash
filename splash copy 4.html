@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Underworld Hotspot</title>
+    <style>
+        body {
+            background: #000 url('images/background.webp') no-repeat center center fixed;
+            background-size: cover;
+            color: #fff;
+            font-family: 'Garamond', serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            text-align: center;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            margin: 20px;
+            width: 90%;
+            max-width: 600px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px #fff;
+        }
+        h1 {
+            font-size: 2em;
+            color: #c0c0c0;
+        }
+        hr {
+            border: 1px solid #555;
+        }
+        label, input[type="text"], input[type="password"], input[type="submit"] {
+            display: block;
+            width: 90%;
+            max-width: 400px;
+            margin: 10px auto;
+        }
+        label {
+            font-size: 1em;
+        }
+        input[type="text"], input[type="password"] {
+            padding: 10px;
+            font-size: 1em;
+            border: none;
+            border-radius: 5px;
+        }
+        input[type="submit"] {
+            background: #c0c0c0;
+            color: #000;
+            font-size: 1em;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background: #fff;
+        }
+        .footer {
+            margin-top: 20px;
+            font-size: 0.8em;
+        }
+        .error {
+            color: red;
+            font-size: 1.2em;
+        }
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 1.5em;
+            }
+            label, input[type="text"], input[type="password"], input[type="submit"] {
+                width: 100%;
+            }
+            .container {
+                padding: 15px;
+                margin: 10px;
+            }
+        }
+    </style>
+    <script>
+        const allowedUsers = [
+            { username: 'user1', password: 'pass1' },
+            { username: 'user2', password: 'pass2' },
+        ];
+
+        const allowedVouchers = ['voucher1', 'voucher2'];
+
+        function validateForm() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const voucher = document.getElementById('voucher').value;
+            const errorElement = document.getElementById('error-message');
+
+            console.log('Username:', username);
+            console.log('Password:', password);
+            console.log('Voucher:', voucher);
+
+            const userValid = allowedUsers.some(user => user.username === username && user.password === password);
+            const voucherValid = allowedVouchers.includes(voucher);
+
+            console.log('User valid:', userValid);
+            console.log('Voucher valid:', voucherValid);
+
+            if (userValid || voucherValid) {
+                return true;
+            } else {
+                errorElement.textContent = 'Invalid username/password or voucher code.';
+                return false;
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to the Underworld Hotspot</h1>
+        <hr>
+        <img src="images/logo.webp" alt="Underworld Logo" style="width: 100%; max-width: 400px;">
+        <hr>
+        <p>To gain access to the Internet, please log in using your credentials or a voucher code.</p>
+
+        <div id="error-message" class="error"></div>
+
+        <form method="GET" action="$authaction" onsubmit="return validateForm()">
+            <input type="hidden" name="tok" value="$tok">
+            <input type="hidden" name="redir" value="$redir">
+
+            <!-- Username and Password Login -->
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username">
+
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password">
+
+            <hr>
+
+            <!-- Voucher Login -->
+            <label for="voucher">Voucher Code:</label>
+            <input type="text" id="voucher" name="voucher">
+
+            <input type="submit" value="Continue">
+        </form>
+
+        <hr>
+        <div class="footer">
+            <?php echo 'if you want to serve PHP code in XHTML or XML documents,
+                use these tags'; ?>
+            <p>Copyright &copy; The Nodogsplash Contributors 2004-2023.</p>
+            <p>This software is released under the GNU GPL license.</p>
+        </div>
+    </div>
+</body>
+</html>
