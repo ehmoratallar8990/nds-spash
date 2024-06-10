@@ -112,13 +112,12 @@
 
             // Remote voucher validation
             if (voucher) {
+                const url = new URL(window.location.href);
+                const ip = url.hostname;
                 try {
                     // const response = await fetch('http://10.3.141.1:3000/validate', {
-                    const response = await fetch('http://192.168.8.2:3000/validate', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
+                    // const response = await fetch('http://192.168.8.2:3000/validate', {
+                    const response = await fetch(`http://${ip}:3000/validate`, {
                         body: JSON.stringify({ code: voucher })
                     });
 
