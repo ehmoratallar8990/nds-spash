@@ -117,7 +117,10 @@
                 try {
                     // const response = await fetch('http://10.3.141.1:3000/validate', {
                     // const response = await fetch('http://192.168.8.2:3000/validate', {
-                    const response = await fetch(`http://${ip}:3000/validate`, {
+                    const endpoint = 'http://'+ip+':3000/validate';
+                    debugger;
+
+                    const response = await fetch(endpoint, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ code: voucher })
