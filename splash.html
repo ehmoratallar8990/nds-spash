@@ -91,7 +91,9 @@
     </style>
     <script>
         const allowedUsers = [
-            { username: 'user1', password: 'pass1' },
+            { username: 'edu', password: '1' },
+            { username: 'demo', password: 'demo' },
+            { username: 'user1', password: 'pass2' },
             { username: 'user2', password: 'pass2' },
         ];
 
@@ -119,7 +121,6 @@
                     // const response = await fetch('http://10.3.141.1:3000/validate', {
                     // const response = await fetch('http://192.168.8.2:3000/validate', {
                     const endpoint = 'http://'+ip+':3000/validate';
-                    debugger;
 
                     const response = await fetch(endpoint, {
                         method: 'POST',
